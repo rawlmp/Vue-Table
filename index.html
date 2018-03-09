@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- CSS de Bulma.js un miniBoostrap sin Javascript -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="main">
+        <div class="header">
+            <div class="container">
+                <h1>POLITICIANS WITH VUE.js</h1>
+            </div>
+            <div class="filters">
+                <!-- La directiva @click se usa para llamar a uno de los métodos del objeto Vue -->
+                <input type="checkbox" name="party" value="R" @click="filter">Republican
+                <input type="checkbox" name="party" value="D" @click="filter">Democrat
+                <input type="checkbox" name="party" value="I" @click="filter">Independent
+                <!-- La directiva @change igual que click -->
+                <select name="states" id="states" @change="filter">
+                    <option value="all">--All--</option>
+                    <!-- Este v-for es muy parecido al de angular. Por cada elemento en el campo members se crea un objeto HTML como en el que está escrito. -->
+                    <option v-for="state in states" :value="state">{{state}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="info">
+            <div class="image" v-if="allMembers.length == 0">
+                <img src="loader.gif" alt="loader">
+            </div>
+            <!-- La directiva v-if se usa para que este elemento son se muestre si no se vumple esa condición -->
+            <table v-cloak v-if="members.length > 0">
+                <thead>
+                    <th>Name</th>
+                    <th>Party</th>
+                    <th>State</th>
+                </thead>
+                <tbody>
+                    <!-- De nuevo un v-for para crear cada uno de los miembros. Los {{}} es para bindear las propiedades -->
+                    <tr v-for="member in members">
+                        <td>
+                            <a :href="member.url">{{ member.first_name }}
+                                <span v-if="member.middle_name">{{ member.middle_name }}</span> {{ member.last_name }}</a>
+                        </td>
+                        <td>{{ member.party }} </td>
+                        <td>{{ member.state }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Este es el modal de Bulma.js que solo aparece si se activa el trigger canShowAdvice y no hay miembros -->
+        <div class="notificationContainer">
+            <div class="notification is-danger" v-if="canShowAdvice && members.length == 0">
+                Any member with this criteria. Try to change State or Party to solve it.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!--Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--Here your main js file-->
+    <script src="main.js"></script>
+</body>
+
+</html>
